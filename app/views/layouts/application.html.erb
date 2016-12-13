@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      <%= [content_for(:page_title), SITE_NAME].compact.join(' - ').html_safe %>
+    </title>
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+    <%= csrf_meta_tags %>
+    <meta/>
+    <%= stylesheet_link_tag '//fonts.googleapis.com/css?family=Raleway:700,900' %> 
+    <%= stylesheet_link_tag '//fonts.googleapis.com/css?family=Lora:400,700italic,700,400italic' %>
+    <%= favicon_link_tag 'favicon.png' %>
+    <%= yield :head %>
+    <%= yield :canonical %>
+  </head>
+  <body>
+    <% if developer_signed_in? %>
+      <nav class="admin_panel">
+        <ul>
+          <li>
+            <%= link_to current_developer.username, current_developer %>
+          </li>
+          <li>
+            <%= link_to "Sign Out", account_signout_path %>
+          </li>
+          <li>
+            <%= link_to "Create Post", new_post_path %>
+          </li>
+          <li>
+            <%= link_to "Drafts", drafts_path %>
+          </li>
+          <li>
+            <%= link_to "Profile", edit_profile_path %>
+          </li>
+        </ul>
+      </nav>
+    <% end %>
+    <header class="site_head">
+      <div>
+        <h1>
+          <%= link_to root_path do %> 
+            Today I <span>Learned</span>
+          <% end %>
+        </h1>
+      </div>
+    </header>
+    <%= render 'shared/flash' %>
+    <main>
+      <%= yield %>
+    </main>
+    <nav class="site_nav">
+      <ul>
+        <li class="site_nav__about">
+          <%= link_to "?", "#", class: "site_nav__link" %>
+          <div class="site_nav__toggle">
+            <div class="copy">
+              <markdown>
+                
+                This is Alex Miller's TIL.  
+                TIL is an open-source project by
+                [Hashrocket](https://hashrocket.com) that exists to catalogue
+                the sharing & accumulation of knowledge as it happens
+                day-to-day. 
+
+              </markdown>
+              <ul class="social">
+                <li>
+                  <%= link_to "/apmiller108", "https://twitter.com/apmiller108", class: "social_twitter" %>
+                </li>
+                <li>
+                  <%= link_to "/apmiller108", "https://github.com/apmiller108", class: "social_github" %>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li class="site_nav__statistics">
+          <%= link_to "statistics", statistics_path, class: "site_nav__link" %>
+        </li>
+        <li class="site_nav__search">
+          <%= link_to "search", "#", class: "site_nav__link" %>
+          <div class="site_nav__toggle">>
+            <%= form_tag root_path, method: 'get' do %>
+              <%= search_field_tag :q %>
+              <%= button_tag 'Search', name: nil %>
+            <% end %>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </body>
+</html>
